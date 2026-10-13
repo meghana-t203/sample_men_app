@@ -1,42 +1,29 @@
-let express = require('express');
-let router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-let users = require('../models/users');
+const Users = require("../models/users");
 
 router.post("/register", async (req, res) => {
-  try {
-    const result = await registerUser(req.body);
+    try {
+        console.log("Received data:", req.body);
 
-    console.log("User saved:", result);
+        const user = new Users(req.body);
 
-    res.status(201).send(result);
-  } catch (err) {
-    console.log("Register error:", err);
-    res.status(500).send(err);
-  }
+        const result = await user.save();
+
+        console.log("User saved:", result);
+
+        res.status(201).json(result);
+
+    } catch (err) {
+        console.log("Register error:", err);
+
+        res.status(500).json({
+            message: "Registration failed",
+            error: err.message
+        });
+    }
 });
-router.post("/register", async (req, res) => {
-  try {
-    const result = await registerUser(req.body);
-
-    console.log("User saved:", result);
-
-    res.status(201).send(result);
-  } catch (err) {
-    console.log("Register error:", err);
-    res.status(500).send(err);
-  }
-});
-router.post("/register", async (req, res) => {
-  try {
-    // your existing registration/database code here
-
-    res.status(201).send(result);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
 
 router.post("/login", (req, res) => {
     res.send("login page called");
